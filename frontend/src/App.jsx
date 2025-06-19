@@ -7,7 +7,7 @@ export default function App() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
+    axios.get('https://your-backend-url.up.railway.app/api/products')
       .then(res => setProducts(res.data));
   }, []);
 
