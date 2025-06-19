@@ -5,32 +5,61 @@ import './style.css';
 const products = [
   {
     id: 1,
-    title: 'Wireless Headphones',
-    price: 59.99,
-    description: 'High-quality wireless headphones with noise cancellation.',
-    image: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=400&q=80',
+    title: 'Google Pixel 8 Pro',
+    type: 'Phone',
+    brand: 'Google',
+    price: 999.99,
+    description: 'The latest Google flagship with an advanced camera and AI features.',
+    image: 'https://images.unsplash.com/photo-1512499617640-c2f999098c01?auto=format&fit=crop&w=400&q=80', // Modern smartphone
+    rating: 4.8,
+    reviews: 87,
+    stock: 8,
+    badge: 'New',
   },
   {
     id: 2,
-    title: 'Smart Watch',
-    price: 129.99,
-    description: 'Track your fitness and notifications with this smart watch.',
-    image: 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=400&q=80',
+    title: 'Samsung Galaxy Buds2 Pro',
+    type: 'Earbuds',
+    brand: 'Samsung',
+    price: 229.99,
+    description: 'Premium wireless earbuds with intelligent ANC and immersive sound.',
+    image: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=crop&w=400&q=80', // White earbuds
+    rating: 4.7,
+    reviews: 64,
+    stock: 15,
+    badge: '',
   },
   {
     id: 3,
-    title: 'Bluetooth Speaker',
-    price: 39.99,
-    description: 'Portable Bluetooth speaker with deep bass and long battery life.',
-    image: 'https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=400&q=80',
+    title: 'Dell UltraSharp 34" Curved Monitor',
+    type: 'Monitor',
+    brand: 'Dell',
+    price: 1199.99,
+    description: 'Immersive 34-inch curved WQHD monitor for multitasking and entertainment.',
+    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=400&q=80', // Curved monitor
+    rating: 4.9,
+    reviews: 45,
+    stock: 5,
+    badge: 'Best Seller',
   },
   {
     id: 4,
-    title: 'DSLR Camera',
-    price: 499.99,
-    description: 'Capture stunning photos with this high-resolution DSLR camera.',
-    image: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-  },
+    title: 'Apple iPad Air (2024)',
+    type: 'Tablet',
+    brand: 'Apple',
+    price: 699.99,
+    description: 'Lightweight, powerful tablet with M2 chip and Liquid Retina display.',
+    image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80', // iPad/tablet
+    rating: 4.8,
+    reviews: 73,
+    stock: 10,
+    badge: '',
+  }
+];
+
+const categories = [
+  'All',
+  ...Array.from(new Set(products.map(p => p.type)))
 ];
 
 export default function App() {
@@ -38,6 +67,8 @@ export default function App() {
   const [showCart, setShowCart] = useState(false);
   const [toast, setToast] = useState('');
   const [showAd, setShowAd] = useState(true);
+  const [category, setCategory] = useState('All');
+  const [search, setSearch] = useState('');
 
   const addToCart = (product) => {
     setCart((prev) => {
@@ -62,6 +93,13 @@ export default function App() {
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
   const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
 
+  // Filter products by category and search
+  const filteredProducts = products.filter(p =>
+    (category === 'All' || p.type === category) &&
+    (p.title.toLowerCase().includes(search.toLowerCase()) ||
+     p.description.toLowerCase().includes(search.toLowerCase()))
+  );
+
   return (
     <>
       <header className="header">
@@ -79,10 +117,32 @@ export default function App() {
       )}
       <div className="app-container">
         <h1>Featured Products</h1>
+        <div className="product-filters">
+          <input
+            className="search-bar"
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          <select
+            className="category-select"
+            value={category}
+            onChange={e => setCategory(e.target.value)}
+          >
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
         <div className="product-grid">
-          {products.map(product => (
-            <ProductCard key={product.id} product={product} addToCart={addToCart} />
-          ))}
+          {filteredProducts.length === 0 ? (
+            <div style={{gridColumn: '1/-1', textAlign: 'center', color: '#888', fontSize: '1.2rem'}}>No products found.</div>
+          ) : (
+            filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} addToCart={addToCart} />
+            ))
+          )}
         </div>
         {showCart && (
           <div className="cart-modal">

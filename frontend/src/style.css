@@ -297,3 +297,18 @@ h1 {
 .ad-close:hover {
   color: #b34700;
 }
+
+.product-type-label {
+  margin-top: 8px;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: linear-gradient(90deg, #2d8cff 60%, #6a82fb 100%);
+  color: #fff;
+  font-size: 0.93rem;
+  font-weight: 600;
+  padding: 4px 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(45,140,255,0.09);
+  letter-spacing: 0.5px;
+  text-align: center;
+}
